@@ -52,7 +52,7 @@ resources:
             "$prefix": { get_param: prefix }
       cidr: { get_param: cidr }
       enable_dhcp: true
-      network_id: { get_resource: net }
+      network: { get_resource: net }
       dns_nameservers:
         - 8.8.8.8
 
