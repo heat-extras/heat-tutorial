@@ -59,8 +59,8 @@ resources:
   router_interface_add:
     type: OS::Neutron::RouterInterface
     properties:
-      router_id: { get_resource: router }
-      subnet_id: { get_resource: subnet }
+      router: { get_resource: router }
+      subnet: { get_resource: subnet }
 
 outputs:
   name:

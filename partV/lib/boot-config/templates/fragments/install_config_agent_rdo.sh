@@ -16,7 +16,7 @@ then
 	echo "Setting https_proxy var: $https_proxy"
 fi
 
-curl -L -O https://repos.fedorapeople.org/repos/openstack/openstack-liberty/rdo-release-liberty.rpm
-yum -y install rdo-release-liberty.rpm
+curl -L -O https://repos.fedorapeople.org/repos/openstack/openstack-mitaka/rdo-release-mitaka-7.noarch.rpm
+yum -y install rdo-release-mitaka-7.noarch.rpm
 #yum -y update
 yum -y install python-zaqarclient python-oslo-log python-psutil os-collect-config os-apply-config os-refresh-config dib-utils

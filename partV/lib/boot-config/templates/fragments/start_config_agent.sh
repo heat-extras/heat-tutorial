@@ -5,24 +5,20 @@ if [[ `systemctl` =~ -\.mount ]]; then
 
     # if there is no system unit file, install a local unit
     if [ ! -f /usr/lib/systemd/system/os-collect-config.service ]; then
-
+	agent_location=`/usr/bin/which os-collect-config`
         cat <<EOF >/etc/systemd/system/os-collect-config.service
 [Unit]
 Description=Collect metadata and run hook commands.
 
 [Service]
 Environment=LC_ALL=en_US.UTF-8
-ExecStart=/usr/bin/os-collect-config
+ExecStart=${agent_location} --config-file /etc/os-collect-config.conf
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-cat <<EOF >/etc/os-collect-config.conf
-[DEFAULT]
-command=os-refresh-config
-EOF
     fi
 
     # enable and start service to poll for deployment changes
