@@ -79,7 +79,7 @@ resources:
             wc_notify: { get_attr: [wait_handle, curl_cli] }
           template: |
             #!/bin/bash
-            wc_notify --data-binary '{"status": "SUCCESS"}'
+            wc_notify --data-binary '{"status": "SUCCESS"}' --insecure
 
   http:
     type: ../softwareconfigs/httpd.yaml

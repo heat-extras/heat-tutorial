@@ -5,7 +5,7 @@ parameters:
   ports:
     label: Open Ports on instance
     type: comma_delimited_list
-    default: "80,443"
+    default: "80,443,22"
   
   protocols:
     label: Protocols for open ports
