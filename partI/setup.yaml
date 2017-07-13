@@ -63,8 +63,8 @@ resources:
   router_interface_add:
     type: OS::Neutron::RouterInterface
     properties: 
-      router_id: { get_resource: setup_router }
-      subnet_id: { get_resource: setup_subnet }
+      router: { get_resource: setup_router }
+      subnet: { get_resource: setup_subnet }
 
   instance_port:
     type: OS::Neutron::Port

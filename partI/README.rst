@@ -23,7 +23,7 @@ as follows:
 
 .. code:: bash
 
-  $ openstack stack create -t setup.1.yaml --parameter public_network_id=$PUBLIC_NETOWRK_ID setup
+  $ openstack stack create -t setup.yaml --parameter public_network_id=$PUBLIC_NETOWRK_ID setup
 
 You can now monitor the stack status with:
   
