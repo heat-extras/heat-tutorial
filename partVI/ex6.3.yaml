@@ -74,37 +74,63 @@ resources:
     type: Tutorial::FloatingIP
     properties:
       public_network_id: { get_param: public_network_id } 
-      port: { get_attr: [pool, vip] } 
+      port: { get_attr: [loadbalancer, vip_port_id] } 
 
   loadbalancer:
-    type: OS::Neutron::LoadBalancer
+    type: OS::Neutron::LBaaS::LoadBalancer
     properties:
-      pool_id: { get_resource: pool }
-      protocol_port: 80 
+       vip_subnet: { get_param: subnet }
+  
+  listener_http:
+    type: OS::Neutron::LBaaS::Listener
+    properties:
+      loadbalancer: { get_resource: loadbalancer}
+      name: http_listener
+      protocol: TCP
+      protocol_port: 80
 
-  pool:
-    type: OS::Neutron::Pool
+  listener_https:
+    type: OS::Neutron::LBaaS::Listener
+    properties:
+      loadbalancer : { get_resource: loadbalancer}
+      name: https_listener
+      protocol: TCP
+      protocol_port: 443
+
+  pool_http:
+    type: OS::Neutron::LBaaS::Pool
     properties:
       name: http_pool
       protocol: TCP
-      subnet_id: { get_param: subnet }
-      lb_method: ROUND_ROBIN
-      monitors:
-        - { get_resource: monitor }
-      vip:
-        name: http_vip
-        protocol_port: 80 
-        session_persistence:
-          type: SOURCE_IP
-        subnet: { get_param: subnet }
+      lb_algorithm: ROUND_ROBIN
+      listener: { get_resource: listener_http}
 
-  monitor:
-    type: OS::Neutron::HealthMonitor
+  monitor_http:
+    type: OS::Neutron::LBaaS::HealthMonitor
     properties:
       type: TCP
+      pool: { get_resource: pool_http }
       delay: 5
       max_retries: 3
       timeout: 2
+
+  pool_https:
+    type: OS::Neutron::LBaaS::Pool
+    properties:
+      name: https_pool
+      protocol: TCP
+      lb_algorithm: ROUND_ROBIN
+      listener: { get_resource: listener_https}
+
+  monitor_https:
+    type: OS::Neutron::LBaaS::HealthMonitor
+    properties:
+      type: TCP
+      pool: { get_resource: pool_https }
+      delay: 5
+      max_retries: 3
+      timeout: 2
+
 
   cluster:
     type: OS::Heat::ResourceGroup
@@ -121,7 +147,9 @@ resources:
           flavor: { get_param: flavor }
           network_name: { get_param: network_name }
           message: { get_param: message }
-          pool_id: { get_resource: pool }
+          pool_id_http: { get_resource: pool_http }
+          pool_id_https: { get_resource: pool_https }
+          subnet: { get_param: subnet }
 
 outputs:
   http_ipaddr:

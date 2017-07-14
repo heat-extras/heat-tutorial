@@ -54,6 +54,7 @@ resources:
       enable_dhcp: true
       network: { get_resource: net }
       dns_nameservers:
+        - 172.18.208.44
         - 8.8.8.8
 
   router_interface_add:

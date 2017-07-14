@@ -14,6 +14,17 @@ parameters:
     constraints:
       - custom_constraint: glance.image
 
+  name:
+    label: Instance Name
+    type: string
+
+  subnet: 
+    label: Subnet for Pool member
+    type: string
+    default: setup_sub
+    constraints:
+      - custom_constraint: neutron.subnet
+
   flavor:
     label: Instance Flavor
     description: Paramter that defines what type of flavor this instance will launch as
@@ -47,10 +58,16 @@ parameters:
     constraints:
       - custom_constraint: neutron.network
 
-  pool_id:
+  pool_id_http:
     type: string
     constraints:
       - custom_constraint: neutron.lbaas.pool
+
+  pool_id_https:
+    type: string
+    constraints:
+      - custom_constraint: neutron.lbaas.pool
+
 
   message:
     label: Initial content for index.html
@@ -71,6 +88,7 @@ resources:
     type: OS::Nova::Server
     properties:
       image: { get_param: image }
+      name: { get_param: name }
       security_groups: 
         - { get_param: security_group_icmp }
         - { get_param: security_group_web }
@@ -82,12 +100,21 @@ resources:
       software_config_transport: POLL_SERVER_HEAT
       user_data: { get_attr: [boot_config, config] } 
 
-  member:
-    type: OS::Neutron::PoolMember
+  member_http:
+    type: OS::Neutron::LBaaS::PoolMember
     properties:
-      pool_id: {get_param: pool_id}
+      pool: {get_param: pool_id_http}
       address: {get_attr: [instance, first_address]}
       protocol_port: 80 
+      subnet: {get_param: subnet}
+
+  member_https:
+    type: OS::Neutron::LBaaS::PoolMember
+    properties:
+      pool: {get_param: pool_id_https}
+      address: {get_attr: [instance, first_address]}
+      protocol_port: 443
+      subnet: {get_param: subnet}
 
 outputs:
   ipaddr:
