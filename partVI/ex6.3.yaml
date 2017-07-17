@@ -89,14 +89,6 @@ resources:
       protocol: TCP
       protocol_port: 80
 
-  listener_https:
-    type: OS::Neutron::LBaaS::Listener
-    properties:
-      loadbalancer : { get_resource: loadbalancer}
-      name: https_listener
-      protocol: TCP
-      protocol_port: 443
-
   pool_http:
     type: OS::Neutron::LBaaS::Pool
     properties:
@@ -114,24 +106,6 @@ resources:
       max_retries: 3
       timeout: 2
 
-  pool_https:
-    type: OS::Neutron::LBaaS::Pool
-    properties:
-      name: https_pool
-      protocol: TCP
-      lb_algorithm: ROUND_ROBIN
-      listener: { get_resource: listener_https}
-
-  monitor_https:
-    type: OS::Neutron::LBaaS::HealthMonitor
-    properties:
-      type: TCP
-      pool: { get_resource: pool_https }
-      delay: 5
-      max_retries: 3
-      timeout: 2
-
-
   cluster:
     type: OS::Heat::ResourceGroup
     properties:
@@ -148,7 +122,6 @@ resources:
           network_name: { get_param: network_name }
           message: { get_param: message }
           pool_id_http: { get_resource: pool_http }
-          pool_id_https: { get_resource: pool_https }
           subnet: { get_param: subnet }
 
 outputs:

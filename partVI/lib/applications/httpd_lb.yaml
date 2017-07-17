@@ -63,12 +63,6 @@ parameters:
     constraints:
       - custom_constraint: neutron.lbaas.pool
 
-  pool_id_https:
-    type: string
-    constraints:
-      - custom_constraint: neutron.lbaas.pool
-
-
   message:
     label: Initial content for index.html
     type: string
@@ -106,14 +100,6 @@ resources:
       pool: {get_param: pool_id_http}
       address: {get_attr: [instance, first_address]}
       protocol_port: 80 
-      subnet: {get_param: subnet}
-
-  member_https:
-    type: OS::Neutron::LBaaS::PoolMember
-    properties:
-      pool: {get_param: pool_id_https}
-      address: {get_attr: [instance, first_address]}
-      protocol_port: 443
       subnet: {get_param: subnet}
 
 outputs:
