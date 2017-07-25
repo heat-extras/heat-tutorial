@@ -41,10 +41,9 @@ extensive and contains useful links as well as documentation on each exercise.
 Prerequsites & Other Details
 ============================
 
-This tutorial was built for the Openstack Liberty release however most concepts 
-are applicable even up to the Newton release. I am planning on updating this 
-tutorial to a newever version in the near feature. This tutorial also assumed 
-you are working with a RHEL based image (a Centos 7 image is used all 
+This tutorial was basically built for the Openstack Liberty release. However it will be updated for 
+each version of OpenStack in seperated branches. The master branch includes always the last changes.
+This tutorial also assumed you are working with a RHEL based image (a Centos 7 image is used all 
 throughout the exercises). This second point only becomes more important in 
 the second half of the tutorial when software configurations are covered. 
 
