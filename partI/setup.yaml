@@ -45,7 +45,7 @@ resources:
       name: setup_subnet
       cidr: 10.0.56.0/24
       enable_dhcp: true
-      network_id: { get_resource: setup_net }
+      network: { get_resource: setup_net }
       dns_nameservers:
           - 8.8.8.8
 
